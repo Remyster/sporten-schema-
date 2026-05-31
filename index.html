@@ -12,178 +12,684 @@
 <title>Gym Log</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
-:root{--bg:#0d0d0d;--s1:#161616;--s2:#1e1e1e;--br:#272727;--tx:#e2e2e2;--mu:#666;--ac:#e8ff00;--teal:#4ecdc4;--pu:#a78bfa;--am:#f59e0b;--co:#ff6b6b;--gr:#6fcf97;--or:#f97316}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
-.app{max-width:660px;margin:0 auto;padding:0 0 60px}
-.hdr{padding:14px 14px 10px;border-bottom:1px solid var(--br);background:var(--bg);position:sticky;top:0;z-index:50}
+:root{--bg:#0d0d0d;--s1:#161616;--s2:#1e1e1e;--s3:#242424;--br:#272727;--tx:#e2e2e2;--mu:#555;--ac:#e8ff00;--teal:#4ecdc4;--pu:#a78bfa;--am:#f59e0b;--co:#ff6b6b;--gr:#6fcf97}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;overscroll-behavior:none}
+.app{max-width:660px;margin:0 auto;padding:0 0 80px}
+
+/* HEADER */
+.hdr{padding:12px 14px 10px;border-bottom:1px solid var(--br);background:var(--bg);position:sticky;top:0;z-index:50}
 .hdr-row{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--ac)}
-.sub{font-size:11px;color:var(--mu)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--ac)}
+.sub{font-size:10px;color:var(--mu)}
 .tabs{display:flex;gap:4px}
-.tab{flex:1;padding:7px 4px;text-align:center;border:1px solid var(--br);border-radius:7px;cursor:pointer;background:var(--s1);color:var(--mu);font-size:11px;transition:all .15s;user-select:none}
-.tab b{display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--tx)}
+.tab{flex:1;padding:7px 4px;text-align:center;border:1px solid var(--br);border-radius:7px;cursor:pointer;background:var(--s1);color:var(--mu);font-size:10px;transition:all .15s;user-select:none}
+.tab b{display:block;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:var(--tx)}
 .tab.active{background:var(--ac);border-color:var(--ac)}
 .tab.active,.tab.active b{color:#000}
-.prog-wrap{padding:9px 14px 0}
-.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-bottom:4px}
-.prog-bar{height:3px;background:var(--br);border-radius:2px;overflow:hidden}
+.prog-wrap{padding:8px 14px 0}
+.prog-row{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-bottom:4px}
+.prog-bar{height:2px;background:var(--br);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;background:var(--ac);border-radius:2px;transition:width .3s}
+
+/* DAY */
 .day{display:none;padding:10px 14px 0}
 .day.active{display:block}
 .day-hdr{margin-bottom:9px}
-.day-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:2px}
-.day-focus{font-size:11px;color:var(--mu)}
-.card{background:var(--s1);border:1px solid var(--br);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:border-color .2s,opacity .2s}
-.card.done{border-color:#253025;opacity:.5}
-.card-body{display:flex}
-.mv{width:72px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:7px 5px;background:var(--s2);border-right:1px solid var(--br)}
-.mv svg{width:50px;height:75px}
-.ci{flex:1;padding:9px 11px;min-width:0}
-.ci-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px}
-.ex-name{font-weight:600;font-size:13px;line-height:1.2}
-.ex-mus{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--br);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .15s}
-.chk.on{background:var(--ac);border-color:var(--ac);color:#000}
-.stats{display:flex;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap}
-.pill{background:var(--s2);border:1px solid var(--br);border-radius:5px;padding:2px 7px;font-family:'DM Mono',monospace;font-size:11px;white-space:nowrap}
-.pill.s{color:var(--teal)}.pill.r{color:var(--tx)}
-.w-wrap{display:flex;align-items:center;gap:3px}
-.w-in{background:var(--s2);border:1px solid var(--br);border-radius:5px;padding:2px 4px;font-family:'DM Mono',monospace;font-size:11px;color:var(--tx);width:50px;text-align:center;outline:none;transition:border-color .15s}
-.w-in:focus{border-color:var(--ac)}
-.w-unit{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
-.warn{display:inline-flex;align-items:center;gap:3px;background:#1f1500;border:1px solid #3d2800;border-radius:4px;padding:2px 6px;font-size:10px;color:var(--am);margin-bottom:5px}
-.nt-btn{font-size:11px;color:var(--mu);cursor:pointer;background:none;border:none;padding:0;display:flex;align-items:center;gap:3px;transition:color .15s}
-.nt-btn:hover{color:var(--tx)}
-.nt-body{margin-top:5px;padding:7px 8px;background:var(--s2);border-radius:6px;font-size:12px;color:#999;line-height:1.65;display:none;border-left:2px solid #333}
+.day-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px}
+.day-focus{font-size:10px;color:var(--mu)}
+
+/* EXERCISE CARD */
+.card{background:var(--s1);border:1px solid var(--br);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:opacity .2s}
+.card.done{opacity:.45}
+.card-top{display:flex}
+
+/* EXERCISE ILLUSTRATION */
+.ex-il{width:68px;flex-shrink:0;background:var(--s2);border-right:1px solid var(--br);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;gap:3px}
+.ex-il svg{width:54px;height:62px}
+.ex-type-badge{font-size:8px;text-transform:uppercase;letter-spacing:.5px;color:var(--mu);text-align:center}
+
+/* CARD INFO */
+.ci{flex:1;padding:9px 10px;min-width:0}
+.ci-head{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:5px}
+.ex-name{font-weight:600;font-size:12px;line-height:1.2}
+.ex-mus{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.ci-btns{display:flex;gap:4px;flex-shrink:0}
+.ic-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--br);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mu);transition:all .15s}
+.ic-btn:hover{border-color:#555;color:var(--tx)}
+.ic-btn.done-btn.on{background:var(--ac);border-color:var(--ac);color:#000}
+
+.warn{display:inline-flex;align-items:center;gap:3px;background:#1f1500;border:1px solid #3d2800;border-radius:4px;padding:1px 5px;font-size:9px;color:var(--am);margin-bottom:5px}
+
+/* SET TABLE */
+.set-table{width:100%;margin-bottom:6px}
+.set-head{display:grid;grid-template-columns:28px 1fr 1fr 24px;gap:4px;margin-bottom:3px;padding:0 2px}
+.set-head span{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
+.set-row{display:grid;grid-template-columns:28px 1fr 1fr 24px;gap:4px;align-items:center;margin-bottom:3px}
+.set-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-align:center}
+.set-in{background:var(--s2);border:1px solid var(--br);border-radius:5px;padding:4px 4px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);width:100%;text-align:center;outline:none;transition:border-color .15s;-moz-appearance:textfield}
+.set-in::-webkit-inner-spin-button,.set-in::-webkit-outer-spin-button{-webkit-appearance:none}
+.set-in:focus{border-color:var(--ac)}
+.set-in.done-set{border-color:#2a3a2a;background:#111;color:#555}
+.set-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--br);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all .15s}
+.set-chk.on{background:var(--ac);border-color:var(--ac);color:#000}
+
+/* BOTTOM ACTIONS */
+.card-actions{display:flex;align-items:center;gap:5px;padding:4px 10px 8px;flex-wrap:wrap}
+.act-btn{font-size:10px;padding:3px 8px;border-radius:5px;cursor:pointer;border:1px solid var(--br);background:var(--s2);color:var(--mu);transition:all .15s;white-space:nowrap}
+.act-btn:hover{color:var(--tx);border-color:#444}
+.timer-btn{font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:5px;cursor:pointer;border:1px solid #3a5500;background:#1a2a00;color:var(--ac);transition:all .15s;white-space:nowrap}
+.timer-btn.running{background:#2a1500;border-color:#5a3000;color:var(--am)}
+.timer-btn.urgent{background:#2a0000;border-color:#5a0000;color:var(--co);animation:pulse .5s infinite alternate}
+.timer-btn.done-t{background:#0a2a0a;border-color:#1a5a1a;color:var(--gr)}
+.swap-btn{font-size:10px;padding:3px 8px;border-radius:5px;cursor:pointer;border:1px solid #2a2a4a;background:#121224;color:#8888cc;transition:all .15s}
+.swap-btn:hover{border-color:#4a4aaa;color:#aaaaff}
+@keyframes pulse{from{opacity:1}to{opacity:.4}}
+
+/* NOTES & COMMENT */
+.nt-body{padding:6px 10px 4px;font-size:11px;color:#888;line-height:1.6;border-top:1px solid var(--br);display:none}
 .nt-body.open{display:block}
-.cardio{background:#0a190a;border:1px solid #1d3a1d;border-radius:10px;padding:11px 13px;margin-top:9px;display:flex;align-items:center;gap:10px}
-.cardio-ic{font-size:20px;flex-shrink:0}
-.cardio-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gr);font-weight:600;margin-bottom:2px}
-.cardio-tx{color:#aaa;font-size:12px}
+.comment-in{width:100%;background:transparent;border:none;border-top:1px solid var(--br);padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:11px;color:#888;resize:none;outline:none;line-height:1.4;min-height:28px;overflow:hidden}
+.comment-in:focus{color:var(--tx)}
+.comment-in::placeholder{color:#333}
+
+/* CARDIO */
+.cardio{background:#0a190a;border:1px solid #1d3a1d;border-radius:10px;padding:10px 13px;margin-top:8px;display:flex;align-items:center;gap:10px}
+.cardio-ic{font-size:18px;flex-shrink:0}
+.cardio-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--gr);font-weight:600;margin-bottom:1px}
+.cardio-tx{color:#aaa;font-size:11px}
+
+/* TIMER OVERLAY */
+.timer-ov{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:2px solid var(--br);border-radius:14px;padding:12px 22px;z-index:200;text-align:center;min-width:160px;box-shadow:0 6px 32px #000c}
+.timer-ov.show{display:block}
+.t-big{font-family:'Bebas Neue',sans-serif;font-size:50px;letter-spacing:2px;line-height:1;color:var(--ac);transition:color .3s}
+.t-big.urg{color:var(--co)}
+.t-big.klaar{color:var(--gr)}
+.t-lbl{font-size:10px;color:var(--mu);margin-top:1px}
+.t-stop{margin-top:7px;font-size:10px;color:var(--mu);cursor:pointer;background:none;border:none;text-decoration:underline}
+
+/* DB MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:#000a;z-index:100}
+.modal-bg.show{display:block}
+.modal{position:fixed;bottom:0;left:0;right:0;max-height:85vh;background:var(--s1);border-radius:16px 16px 0 0;z-index:101;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s ease}
+.modal.show{transform:translateY(0)}
+.modal-hdr{padding:12px 16px 8px;border-bottom:1px solid var(--br);flex-shrink:0}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px}
+.modal-sub{font-size:10px;color:var(--mu)}
+.modal-close{position:absolute;top:12px;right:14px;font-size:18px;cursor:pointer;color:var(--mu);background:none;border:none;line-height:1}
+.cat-tabs{display:flex;gap:4px;overflow-x:auto;padding:8px 14px;flex-shrink:0;scrollbar-width:none}
+.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{flex-shrink:0;padding:4px 10px;border-radius:20px;border:1px solid var(--br);font-size:10px;cursor:pointer;background:var(--s2);color:var(--mu);transition:all .15s;white-space:nowrap}
+.cat-tab.active{background:var(--ac);border-color:var(--ac);color:#000;font-weight:600}
+.ex-list{overflow-y:auto;flex:1;padding:6px 14px 20px}
+.ex-db-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--br);cursor:pointer;transition:background .15s}
+.ex-db-item:hover .ex-db-name{color:var(--ac)}
+.ex-db-il{width:40px;height:40px;flex-shrink:0;background:var(--s2);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.ex-db-il svg{width:34px;height:34px}
+.ex-db-name{font-size:13px;font-weight:500}
+.ex-db-meta{font-size:10px;color:var(--mu)}
+.ex-db-item.current .ex-db-name{color:var(--ac)}
+.ex-db-item.current{background:#1a1a00;margin:0 -14px;padding:10px 14px}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="hdr">
-  <div class="hdr-row">
-    <div class="logo">GYM LOG</div>
-    <div class="sub">Gewichten worden opgeslagen ✓</div>
-  </div>
-  <div class="tabs" id="tabs">
-    <div class="tab active" onclick="sw(0)"><b>MA</b>Pull + Armen</div>
-    <div class="tab" onclick="sw(1)"><b>WO</b>Push + Armen</div>
+  <div class="hdr-row"><div class="logo">GYM LOG</div><div class="sub">sets · reps · notities opgeslagen</div></div>
+  <div class="tabs">
+    <div class="tab active" onclick="sw(0)"><b>MA</b>Pull+Armen</div>
+    <div class="tab" onclick="sw(1)"><b>WO</b>Push+Armen</div>
     <div class="tab" onclick="sw(2)"><b>VR</b>Full Body</div>
   </div>
 </div>
 <div class="prog-wrap">
-  <div class="prog-row"><span id="pt">0 / 0 gedaan</span><span id="pp">0%</span></div>
+  <div class="prog-row"><span id="pt">0 / 0 sets gedaan</span><span id="pp">0%</span></div>
   <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
 </div>
 <div id="d0" class="day active"></div>
 <div id="d1" class="day"></div>
 <div id="d2" class="day"></div>
 </div>
+
+<div class="timer-ov" id="tOv">
+  <div class="t-big" id="tBig">40</div>
+  <div class="t-lbl" id="tLbl">seconden rust</div>
+  <button class="t-stop" onclick="cancelTimer()">annuleer</button>
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="closeModal()"></div>
+<div class="modal" id="modal">
+  <div class="modal-hdr">
+    <div class="modal-title">Oefening wisselen</div>
+    <div class="modal-sub" id="modalSub">Kies een vervanging</div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="ex-list" id="exList"></div>
+</div>
+
 <script>
+// ── EXERCISE ILLUSTRATIONS ──────────────────────────────────
 const MC={back:'#4ecdc4',lats:'#4ecdc4',rotator:'#e8ff00',shoulder:'#e8ff00',rearDelt:'#e8ff00',bicep:'#a78bfa',tricep:'#f59e0b',chest:'#ff6b6b',quads:'#6fcf97',hamstrings:'#6fcf97',core:'#f97316'};
-function mksvg(g){
-  const c=MC[g]||'#888';
-  const H={
-    back:`<rect x="22" y="24" width="27" height="20" rx="4" fill="${c}" opacity=".8"/>`,
-    lats:`<path d="M22 30 L24 53 L29 53 L28 30Z" fill="${c}" opacity=".8"/><path d="M49 30 L47 53 L42 53 L43 30Z" fill="${c}" opacity=".8"/>`,
-    rotator:`<circle cx="21" cy="26" r="6" fill="${c}" opacity=".9"/><circle cx="50" cy="26" r="6" fill="${c}" opacity=".9"/>`,
-    shoulder:`<ellipse cx="15" cy="29" rx="6" ry="8" fill="${c}" opacity=".85"/><ellipse cx="56" cy="29" rx="6" ry="8" fill="${c}" opacity=".85"/>`,
-    rearDelt:`<ellipse cx="15" cy="29" rx="6" ry="8" fill="${c}" opacity=".85"/><ellipse cx="56" cy="29" rx="6" ry="8" fill="${c}" opacity=".85"/>`,
-    bicep:`<rect x="10" y="26" width="11" height="13" rx="5" fill="${c}" opacity=".85"/><rect x="50" y="26" width="11" height="13" rx="5" fill="${c}" opacity=".85"/>`,
-    tricep:`<rect x="10" y="30" width="11" height="13" rx="5" fill="${c}" opacity=".85"/><rect x="50" y="30" width="11" height="13" rx="5" fill="${c}" opacity=".85"/>`,
-    chest:`<path d="M23 24 L36 24 L36 42 L24 40Z" fill="${c}" opacity=".8"/><path d="M36 24 L48 24 L47 40 L36 42Z" fill="${c}" opacity=".8"/>`,
-    quads:`<rect x="22" y="58" width="13" height="21" rx="5" fill="${c}" opacity=".85"/><rect x="36" y="58" width="13" height="21" rx="5" fill="${c}" opacity=".85"/>`,
-    hamstrings:`<rect x="22" y="60" width="13" height="18" rx="5" fill="${c}" opacity=".85"/><rect x="36" y="60" width="13" height="18" rx="5" fill="${c}" opacity=".85"/>`,
-    core:`<rect x="27" y="41" width="17" height="13" rx="3" fill="${c}" opacity=".85"/>`,
+
+function exSvg(type, muscle, small=false){
+  const c=MC[muscle]||'#888';
+  const vb=small?'0 0 80 80':'0 0 80 80';
+  const sk='#2e2e2e', sw=2, sw2=1.5;
+  // Arrow helper
+  const arr=`<defs><marker id="a${muscle.slice(0,3)}" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="${c}"/></marker></defs>`;
+
+  const poses={
+    curl:`${arr}
+      <circle cx="40" cy="11" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="18" x2="40" y2="47" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="24" y1="26" x2="56" y2="26" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="24" y1="26" x2="20" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="56" y1="26" x2="60" y2="44" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="60" y1="44" x2="53" y2="27" stroke="${c}" stroke-width="${sw}"/>
+      <rect x="47" y="23" width="12" height="3" rx="1.5" fill="${c}" opacity=".8"/>
+      <line x1="32" y1="47" x2="48" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="35" y1="47" x2="30" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="45" y1="47" x2="50" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M64 40 Q70 33 64 26" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    pushdown:`${arr}
+      <circle cx="40" cy="11" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="18" x2="40" y2="47" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="24" y1="26" x2="56" y2="26" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="24" y1="26" x2="20" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="56" y1="26" x2="59" y2="43" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="59" y1="43" x2="55" y2="58" stroke="${c}" stroke-width="${sw}"/>
+      <rect x="48" y="55" width="14" height="3" rx="1.5" fill="${c}" opacity=".8"/>
+      <line x1="32" y1="47" x2="48" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="35" y1="47" x2="30" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="45" y1="47" x2="50" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M63 46 L63 58" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    row:`${arr}
+      <circle cx="25" cy="20" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="25" y1="27" x2="32" y2="50" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="17" y1="34" x2="33" y2="34" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="33" y1="34" x2="55" y2="30" stroke="${c}" stroke-width="${sw}"/>
+      <rect x="52" y="26" width="14" height="4" rx="2" fill="${c}" opacity=".7"/>
+      <line x1="17" y1="34" x2="10" y2="54" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="30" y1="50" x2="25" y2="70" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="34" y1="50" x2="40" y2="70" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M58 30 L46 30" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    pulldown:`${arr}
+      <circle cx="40" cy="14" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="21" x2="40" y2="50" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="20" y1="10" x2="60" y2="10" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="20" y1="10" x2="26" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="60" y1="10" x2="54" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="24" y1="29" x2="56" y2="29" stroke="${c}" stroke-width="${sw2}"/>
+      <line x1="30" y1="50" x2="24" y2="70" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="50" y1="50" x2="56" y2="70" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M40 8 L40 19" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    press:`${arr}
+      <circle cx="40" cy="65" r="6" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="59" x2="40" y2="38" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="22" y1="46" x2="58" y2="46" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="22" y1="46" x2="16" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="58" y1="46" x2="64" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="10" y1="26" x2="70" y2="26" stroke="${c}" stroke-width="${sw}"/>
+      <path d="M22 42 L22 30" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    lateral:`${arr}
+      <circle cx="40" cy="11" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="18" x2="40" y2="47" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="24" y1="26" x2="56" y2="26" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="24" y1="26" x2="12" y2="40" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="56" y1="26" x2="68" y2="40" stroke="${c}" stroke-width="${sw}"/>
+      <circle cx="10" cy="40" r="3" fill="${c}" opacity=".7"/>
+      <circle cx="70" cy="40" r="3" fill="${c}" opacity=".7"/>
+      <line x1="32" y1="47" x2="48" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="35" y1="47" x2="30" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="45" y1="47" x2="50" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M18 34 L10 42" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    deadlift:`${arr}
+      <circle cx="28" cy="20" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="28" y1="27" x2="36" y2="52" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="18" y1="36" x2="38" y2="36" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="38" y1="36" x2="52" y2="54" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="18" y1="36" x2="12" y2="56" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="33" y1="52" x2="28" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="39" y1="52" x2="45" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <rect x="44" y="52" width="20" height="5" rx="2.5" fill="${c}" opacity=".7"/>
+      <circle cx="44" cy="54" r="5" fill="none" stroke="${c}" stroke-width="1.5"/>
+      <circle cx="64" cy="54" r="5" fill="none" stroke="${c}" stroke-width="1.5"/>
+      <path d="M40 50 L28 28" fill="none" stroke="${c}" stroke-width="1.2" stroke-dasharray="3,3"/>`,
+
+    squat:`${arr}
+      <circle cx="40" cy="10" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="17" x2="40" y2="40" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="22" y1="24" x2="58" y2="24" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="22" y1="24" x2="15" y2="40" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="58" y1="24" x2="65" y2="40" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="30" y1="40" x2="50" y2="40" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="33" y1="40" x2="20" y2="60" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="20" y1="60" x2="15" y2="72" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="47" y1="40" x2="60" y2="60" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="60" y1="60" x2="65" y2="72" stroke="${c}" stroke-width="${sw}"/>
+      <path d="M40 44 L40 30" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    legcurl:`${arr}
+      <circle cx="20" cy="28" r="6" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="20" y1="34" x2="44" y2="44" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="12" y1="40" x2="28" y2="40" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="12" y1="40" x2="8" y2="56" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="44" y1="44" x2="60" y2="44" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="60" y1="44" x2="66" y2="30" stroke="${c}" stroke-width="${sw}"/>
+      <circle cx="68" cy="28" r="4" fill="${c}" opacity=".7"/>
+      <path d="M62 42 L66 32" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    rotation:`${arr}
+      <circle cx="40" cy="11" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="18" x2="40" y2="47" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="24" y1="26" x2="56" y2="26" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="56" y1="26" x2="60" y2="42" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="60" y1="42" x2="72" y2="40" stroke="${c}" stroke-width="${sw}"/>
+      <circle cx="74" cy="40" r="3" fill="${c}" opacity=".7"/>
+      <path d="M64 36 Q68 28 60 26" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>
+      <line x1="24" y1="26" x2="20" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="32" y1="47" x2="48" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="35" y1="47" x2="30" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="45" y1="47" x2="50" y2="72" stroke="${sk}" stroke-width="${sw2}"/>`,
+
+    facepull:`${arr}
+      <circle cx="40" cy="11" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="18" x2="40" y2="47" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="24" y1="26" x2="56" y2="26" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="24" y1="26" x2="10" y2="22" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="56" y1="26" x2="70" y2="22" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="6" y1="30" x2="74" y2="30" stroke="${c}" stroke-width="1" stroke-dasharray="2,3"/>
+      <line x1="32" y1="47" x2="48" y2="47" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="35" y1="47" x2="30" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="45" y1="47" x2="50" y2="72" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M14 22 L26 26" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    plank:`${arr}
+      <circle cx="20" cy="30" r="6" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="20" y1="36" x2="62" y2="46" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="12" y1="40" x2="28" y2="40" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="12" y1="40" x2="10" y2="56" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="10" y1="56" x2="14" y2="58" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="62" y1="46" x2="62" y2="58" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="62" y1="58" x2="66" y2="60" stroke="${sk}" stroke-width="${sw}"/>
+      <rect x="8" y="57" width="60" height="2" rx="1" fill="${sk}" opacity=".4"/>
+      <rect x="22" y="36" width="30" height="8" rx="3" fill="${c}" opacity=".2" stroke="${c}" stroke-width="1"/>`,
+
+    fly:`${arr}
+      <circle cx="40" cy="65" r="6" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="59" x2="40" y2="38" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="22" y1="46" x2="58" y2="46" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="22" y1="46" x2="10" y2="34" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="58" y1="46" x2="70" y2="34" stroke="${c}" stroke-width="${sw}"/>
+      <circle cx="10" cy="32" r="3" fill="${c}" opacity=".7"/>
+      <circle cx="70" cy="32" r="3" fill="${c}" opacity=".7"/>
+      <path d="M15 36 L26 44" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    legpress:`${arr}
+      <circle cx="18" cy="35" r="6" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="18" y1="41" x2="36" y2="52" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="10" y1="46" x2="26" y2="46" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="10" y1="46" x2="8" y2="62" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="36" y1="52" x2="52" y2="38" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="36" y1="52" x2="50" y2="62" stroke="${c}" stroke-width="${sw}"/>
+      <rect x="52" y="20" width="6" height="40" rx="2" fill="${sk}" opacity=".5"/>
+      <rect x="46" y="22" width="18" height="14" rx="3" fill="${sk}" opacity=".4" stroke="${c}" stroke-width="1"/>
+      <path d="M46 42 L54 36" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
+
+    press_oh:`${arr}
+      <circle cx="40" cy="30" r="7" fill="none" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="40" y1="37" x2="40" y2="60" stroke="${sk}" stroke-width="${sw}"/>
+      <line x1="22" y1="44" x2="58" y2="44" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="22" y1="44" x2="16" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="58" y1="44" x2="64" y2="28" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="10" y1="24" x2="70" y2="24" stroke="${c}" stroke-width="${sw}"/>
+      <line x1="38" y1="60" x2="34" y2="76" stroke="${sk}" stroke-width="${sw2}"/>
+      <line x1="42" y1="60" x2="46" y2="76" stroke="${sk}" stroke-width="${sw2}"/>
+      <path d="M40 28 L40 14" fill="none" stroke="${c}" stroke-width="1.5" marker-end="url(#a${muscle.slice(0,3)})"/>`,
   };
-  return `<svg viewBox="0 0 71 110" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 4px ${c}55)">
-    <circle cx="35" cy="9" r="8" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1.2"/>
-    <rect x="31" y="16" width="9" height="7" rx="2" fill="#1a1a1a" stroke="#2d2d2d" stroke-width=".8"/>
-    <path d="M21 23 L50 23 L47 56 L24 56Z" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="10" y="23" width="11" height="24" rx="5" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="50" y="23" width="11" height="24" rx="5" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="11" y="48" width="9" height="18" rx="4" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="51" y="48" width="9" height="18" rx="4" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="22" y="57" width="13" height="26" rx="5" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="36" y="57" width="13" height="26" rx="5" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="23" y="84" width="11" height="22" rx="4" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    <rect x="37" y="84" width="11" height="22" rx="4" fill="#1a1a1a" stroke="#2d2d2d" stroke-width="1"/>
-    ${H[g]||''}
-  </svg>`;
+
+  const body=poses[type]||poses.curl;
+  return `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
 }
-const DAYS=[
-  {title:'Maandag',focus:'Pull + Armen',cardio:'Bike intervals — 4 min (20s hard / 10s rustig)',ex:[
-    {id:'m1',name:'Chest-supported Row',sets:'3',reps:'8–12',m:'back',ml:'Rug',notes:'Borst rust op de schuine bank. Trek ellebogen langs het lichaam naar achter. Squeeze de schouderbladen samen bovenaan. Niet slingeren met momentum.'},
-    {id:'m2',name:'Lat Pulldown (neutrale greep)',sets:'2',reps:'8–12',m:'lats',ml:'Lats',notes:'Neutrale greep = minder stress op de schouder. Trek de bar naar je borst, niet je nek. Licht achterover leunen. Denk: schouderbladen omlaag en naar achter.'},
-    {id:'m3',name:'Cable External Rotation',sets:'2',reps:'12–15',m:'rotator',ml:'Rotator Cuff',warn:'revalidatie — héél licht gewicht',notes:'Elleboog 90° gebogen, strak langs je romp. Draai ALLEEN de onderarm naar buiten. Geen kracht zetten — precisiewerk voor herstel.'},
-    {id:'m4',name:'Face Pull',sets:'2',reps:'12–15',m:'rearDelt',ml:'Achterdeltoid / Rotator',notes:'Touw op ooghoogte of iets hoger. Trek naar je gezicht, ellebogen hoog. Duimen wijzen naar achter op het eindpunt. Langzaam en gecontroleerd.'},
-    {id:'m5',name:'Leg Press',sets:'2',reps:'8–10',m:'quads',ml:'Benen (maintenance)',notes:'Maintenance set — geen ego-gewicht. Voeten schouderbreedte, middenvoet op het platform. Knieën niet volledig vergrendelen.'},
-    {id:'m6',name:'Cable Curl',sets:'2',reps:'10–12',m:'bicep',ml:'Bicep',notes:'Laagste kabelpositie. Elleboog vast aan romp. Rol de pols naar boven aan het einde. Neergang 2 seconden — daar zit de meeste groei.'},
-    {id:'m7',name:'Rope Pushdown',sets:'2',reps:'10–15',m:'tricep',ml:'Tricep',notes:'Trek het touw uit elkaar onderaan voor maximale contractie. Ellebogen strak langs het lichaam — bewegen NIET mee. Licht voorover.'},
-  ]},
-  {title:'Woensdag',focus:'Push (schoudervriendelijk) + Armen',cardio:'Incline walk (15%, 5.5 km/u) of fiets — 4 min',ex:[
-    {id:'w1',name:'One-arm Cable Press',sets:'3',reps:'10–12',m:'chest',ml:'Borst',notes:'Kabel op schouder-/borsthoogte. Stabiele split stance. Eén arm tegelijk — andere kant stabiliseert mee. Minder instabiliteit dan barbell.'},
-    {id:'w2',name:'DB Floor Press (neutrale greep)',sets:'2',reps:'8–10',m:'chest',ml:'Borst',warn:'alleen pijnvrij',notes:'Vlak op de grond, dumbbells parallel. De grond begrenst het bewegingsbereik en beschermt de schouder. Bij pijn: direct stoppen.'},
-    {id:'w3',name:'Cable Lateral Raise (scapular plane)',sets:'2',reps:'12–15',m:'shoulder',ml:'Schouder',warn:'max 5 kg — supraspinatus',notes:'Arm NIET recht opzij maar licht naar voren (±30°). Dit is de scapular plane — minder wrijving in de supraspinatus tunnel. Écht licht beginnen.'},
-    {id:'w4',name:'Pallof Press',sets:'2',reps:'10–12/kant',m:'core',ml:'Core (anti-rotatie)',notes:'Kabel op borsthoogte, zijdelings staan. Armen recht naar voren strekken en gecontroleerd terug. Bied weerstand aan de roterende kracht. Romp strak.'},
-    {id:'w5',name:'Hammer Curl',sets:'2',reps:'10–12',m:'bicep',ml:'Bicep / Brachialis',notes:'Neutraal grip (duim omhoog). Traint ook de brachialis — de spier onder de bicep. Elleboog vast aan romp.'},
-    {id:'w6',name:'Rope Pushdown / 1-arm Pressdown',sets:'2',reps:'10–15',m:'tricep',ml:'Tricep',notes:'Touw: trek uit elkaar onderaan. 1-arm als alternatief. Ellebogen strak langs romp — bewegen niet mee.'},
-  ]},
-  {title:'Vrijdag',focus:'Full Body Light + Upper Back + Armen',cardio:'Cardio finisher vrij te kiezen — 4 min',ex:[
-    {id:'f1',name:'Romanian Deadlift (DB)',sets:'2',reps:'8–10',m:'hamstrings',ml:'Hamstrings',notes:'Heupen naar achter duwen — niet naar beneden zakken. Lichte knik in de knie. Rug strak. Dumbbells langs de benen. Voel de stretch in de achterkant.'},
-    {id:'f2',name:'Seated Row (neutrale greep)',sets:'3',reps:'10–12',m:'back',ml:'Rug',notes:'Trek EERST de schouderbladen samen, DAN pas de armen. Romp stabiel — niet achterover leunen met momentum.'},
-    {id:'f3',name:'Neutral-grip Machine Press / Landmine',sets:'2',reps:'10–12',m:'chest',ml:'Borst',warn:'alleen pijnvrij',notes:'ALLEEN pijnvrij. Neutrale grip = minder externe rotatie = minder druk op supraspinatus. Landmine press is door de boogbeweging extra schoudervriendelijk.'},
-    {id:'f4',name:'Reverse Pec Deck',sets:'2',reps:'12–15',m:'rearDelt',ml:'Achterdeltoid',notes:'Armen licht gebogen, beweeg naar achter. Schouderbalans oefening — tegenwicht voor alle drukbewegingen. Niet te zwaar.'},
-    {id:'f5',name:'Leg Curl',sets:'2',reps:'10–12',m:'hamstrings',ml:'Hamstrings',notes:'Gecontroleerd terugkomen — 2 seconden neergang. Heupen op de bank laten rusten, niet optrekken.'},
-    {id:'f6',name:'Preacher Curl / Cable Curl',sets:'2',reps:'10–12',m:'bicep',ml:'Bicep',notes:'Preacher: arm strak op de pad, elleboog geïsoleerd. Volledige extensie onderaan. Cable: constante spanning door heel het bewegingsbereik.'},
-    {id:'f7',name:'Rope Pushdown',sets:'2',reps:'10–15',m:'tricep',ml:'Tricep',notes:'Zelfde als maandag. Als techniek al zit, focus op mind-muscle connection.'},
-  ]},
+
+const TYPE_LABEL={curl:'Curl',pushdown:'Pushdown',row:'Row/Trek',pulldown:'Pulldown',press:'Press',lateral:'Lateral',deadlift:'Deadlift',squat:'Squat',legcurl:'Leg Curl',rotation:'Rotatie',facepull:'Face Pull',plank:'Plank/Core',fly:'Fly',legpress:'Leg Press',press_oh:'OH Press'};
+
+// ── EXERCISE DATABASE ───────────────────────────────────────
+const DB = {
+  rug:[
+    {id:'db_chestrow',name:'Chest-supported Row',type:'row',muscle:'back',ml:'Rug',sets:3,reps:'8–12',notes:'Borst rust op de schuine bank. Trek ellebogen langs het lichaam. Squeeze schouderbladen bovenaan.'},
+    {id:'db_bentrow',name:'Barbell Row',type:'row',muscle:'back',ml:'Rug',sets:3,reps:'6–10',notes:'Romp 45° voorover. Trekken vanuit de rug, niet de armen. Bar naar navel.'},
+    {id:'db_cablerow',name:'Seated Cable Row',type:'row',muscle:'back',ml:'Rug',sets:3,reps:'10–12',notes:'Schouderbladen EERST samentrekken, dan pas armen. Romp stabiel.'},
+    {id:'db_dbrow',name:'Single-arm DB Row',type:'row',muscle:'back',ml:'Rug',sets:3,reps:'10–12',notes:'Hand en knie op bank. Trek elleboog zo ver mogelijk naar achter.'},
+    {id:'db_deadlift',name:'Deadlift',type:'deadlift',muscle:'back',ml:'Rug/Benen',sets:4,reps:'4–6',notes:'Heupen laag, borst hoog. Bar langs de benen. Riem gebruiken bij zwaar gewicht.'},
+    {id:'db_latwide',name:'Lat Pulldown (breed)',type:'pulldown',muscle:'lats',ml:'Lats',sets:3,reps:'8–12',notes:'Brede greep. Trek naar de borst. Leun licht achterover.'},
+    {id:'db_latneutral',name:'Lat Pulldown (neutraal)',type:'pulldown',muscle:'lats',ml:'Lats',sets:2,reps:'8–12',notes:'Neutrale greep = minder schouderstress. Schouderbladen omlaag en achter.'},
+    {id:'db_pullup',name:'Pull-ups',type:'pulldown',muscle:'lats',ml:'Lats',sets:3,reps:'max',notes:'Volledig hangen onderaan. Borst naar de bar. Geassisteerd als nodig.'},
+    {id:'db_facepull',name:'Face Pull',type:'facepull',muscle:'rearDelt',ml:'Achterdeltoid',sets:2,reps:'12–15',notes:'Touw op ooghoogte. Ellebogen hoog. Duimen naar achter op het eindpunt.'},
+    {id:'db_pullover',name:'Cable Pullover',type:'pulldown',muscle:'lats',ml:'Lats',sets:3,reps:'12–15',notes:'Staand bij hoge kabel. Armen gestrekt omlaag brengen. Lats samentrekken.'},
+    {id:'db_revdeck',name:'Reverse Pec Deck',type:'row',muscle:'rearDelt',ml:'Achterdeltoid',sets:2,reps:'12–15',notes:'Armen licht gebogen. Beweeg naar achter. Schouderbalans oefening.'},
+  ],
+  borst:[
+    {id:'db_benchpress',name:'Bench Press',type:'press',muscle:'chest',ml:'Borst',sets:3,reps:'6–10',notes:'Voeten plat op de grond. Grip iets breder dan schouders. Bar naar onderkant borst.'},
+    {id:'db_inclinedb',name:'Incline DB Press',type:'press',muscle:'chest',ml:'Borst',sets:3,reps:'10–12',notes:'30–45° bank. Dumbbells naar binnen draaien bovenaan. Minder schouderstress dan flat.'},
+    {id:'db_floorpress',name:'DB Floor Press (neutraal)',type:'press',muscle:'chest',ml:'Borst',sets:2,reps:'8–10',notes:'ALLEEN pijnvrij. Vlak op grond. Neutrale grip. Grond begrenst bewegingsbereik.'},
+    {id:'db_cablepress',name:'One-arm Cable Press',type:'press',muscle:'chest',ml:'Borst',sets:3,reps:'10–12',notes:'Kabel op schouder/borsthoogte. Split stance. Eén arm. Minder schouderstress.'},
+    {id:'db_pecdeck',name:'Pec Deck Machine',type:'fly',muscle:'chest',ml:'Borst',sets:3,reps:'12–15',notes:'Veiligste borst-oefening voor schouder. Constante spanning. Licht gewicht voldoende.'},
+    {id:'db_cablefly',name:'Cable Fly',type:'fly',muscle:'chest',ml:'Borst',sets:3,reps:'12–15',notes:'Lage kabelpositie. Armen iets gebogen. Stretch onderaan voelen.'},
+    {id:'db_landmine',name:'Landmine Press',type:'press',muscle:'chest',ml:'Borst',sets:2,reps:'10–12',notes:'ALLEEN pijnvrij. Boogbeweging is extra schoudervriendelijk.'},
+    {id:'db_pushup',name:'Push-ups',type:'press',muscle:'chest',ml:'Borst',sets:3,reps:'max',notes:'Lichaam recht. Ellebogen 45° van het lichaam. Volledige extensie bovenaan.'},
+    {id:'db_dips',name:'Dips (borstneiging)',type:'press',muscle:'chest',ml:'Borst/Tricep',sets:3,reps:'8–12',notes:'Licht voorover leunen = meer borst. Geen schouderproblemen? Dan pas uitvoeren.'},
+  ],
+  schouders:[
+    {id:'db_cablateral',name:'Cable Lateral Raise',type:'lateral',muscle:'shoulder',ml:'Schouder',sets:3,reps:'12–15',notes:'Arm licht naar voren (±30°). Scapular plane. MAX 5 kg als supraspinatus nog herstelt.'},
+    {id:'db_dblateral',name:'DB Lateral Raise',type:'lateral',muscle:'shoulder',ml:'Schouder',sets:3,reps:'12–15',notes:'Licht naar voren kantelend. Pinkje omhoog. Niet voorbij schouderhoogte.'},
+    {id:'db_extrot',name:'Cable External Rotation',type:'rotation',muscle:'rotator',ml:'Rotator Cuff',sets:2,reps:'12–15',notes:'REVALIDATIE. Elleboog 90°, strak langs romp. Héél licht. Precisiewerk.'},
+    {id:'db_rearfly',name:'Rear Delt DB Fly',type:'row',muscle:'rearDelt',ml:'Achterdeltoid',sets:3,reps:'15',notes:'Voorover gebogen. Armen uit naar opzij. Licht gewicht, hoge reps.'},
+    {id:'db_ohpress',name:'Overhead Press',type:'press_oh',muscle:'shoulder',ml:'Schouder',sets:3,reps:'6–10',notes:'ALLEEN als schouder volledig hersteld. Bar voor het hoofd langs. Kern spannen.'},
+    {id:'db_dbshopress',name:'DB Shoulder Press',type:'press_oh',muscle:'shoulder',ml:'Schouder',sets:3,reps:'10–12',notes:'Alleen pijnvrij. Dumbbells neutraal of licht naar binnen. Betere bewegingsvrijheid.'},
+    {id:'db_arnoldpress',name:'Arnold Press',type:'press_oh',muscle:'shoulder',ml:'Schouder',sets:3,reps:'10–12',notes:'Roterende beweging. Goed voor all-round schouderdekking. Alleen pijnvrij.'},
+  ],
+  bicep:[
+    {id:'db_barbcurl',name:'Barbell Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'8–12',notes:'Ellebogen vast aan romp. Geen swing. Volledige extensie onderaan.'},
+    {id:'db_dbcurl',name:'DB Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'10–12',notes:'Afwisselend of tegelijk. Supineer de pols bij het omhoogbrengen.'},
+    {id:'db_cablecurl',name:'Cable Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:2,reps:'10–12',notes:'Constante spanning. Laagste positie. Elleboog vast. Neergang 2 seconden.'},
+    {id:'db_hammercurl',name:'Hammer Curl',type:'curl',muscle:'bicep',ml:'Bicep/Brachialis',sets:2,reps:'10–12',notes:'Neutraal grip. Traint ook brachialis. Arm dikker dan bicep alleen.'},
+    {id:'db_preacher',name:'Preacher Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'10–12',notes:'Arm strak op de pad. Volledige extensie onderaan. Geen swing mogelijk.'},
+    {id:'db_inclinecurl',name:'Incline DB Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'12',notes:'Bank op 45–60°. Maximale stretch onderaan. Moeilijker dan normaal.'},
+    {id:'db_concurl',name:'Concentration Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'12',notes:'Elleboog op de knie. Volledig geïsoleerd. Goede mind-muscle connection.'},
+    {id:'db_21s',name:'21s',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'21',notes:'7 onderkant, 7 bovenkant, 7 volledig. Intensieve pump-oefening.'},
+    {id:'db_machinecurl',name:'Machine Curl',type:'curl',muscle:'bicep',ml:'Bicep',sets:3,reps:'12–15',notes:'Meest geïsoleerde optie. Goed voor drop sets. Licht gewicht, hoge reps.'},
+  ],
+  tricep:[
+    {id:'db_ropepush',name:'Rope Pushdown',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'10–15',notes:'Touw uit elkaar trekken onderaan. Ellebogen strak — bewegen NIET mee.'},
+    {id:'db_barpush',name:'Bar Pushdown',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'10–12',notes:'Rechte of EZ-bar. Variatie op rope. Meer gewicht mogelijk.'},
+    {id:'db_1armpush',name:'1-arm Pushdown',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'12',notes:'Elke arm apart. Goed voor symmetrie. Kabel of band.'},
+    {id:'db_cgbench',name:'Close-grip Bench',type:'press',muscle:'tricep',ml:'Tricep',sets:3,reps:'8–10',notes:'Grip op schouderbreedte. Tricep-focus. Alleen als schouder pijnvrij.'},
+    {id:'db_skull',name:'Skull Crusher',type:'press',muscle:'tricep',ml:'Tricep',sets:3,reps:'10–12',notes:'EZ-bar naar voorhoofd. Alleen ellebogen bewegen. Geen swing.'},
+    {id:'db_ohext',name:'Overhead Cable Extension',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'12',notes:'ALLEEN als schouder pijnvrij. Maximale stretch van tricep. Hoge kabel.'},
+    {id:'db_kickback',name:'DB Kickback',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'12–15',notes:'Voorovergebogen. Bovenarm parallel aan de grond. Volledig strekken.'},
+    {id:'db_tricdips',name:'Bench Dips',type:'pushdown',muscle:'tricep',ml:'Tricep',sets:3,reps:'10–15',notes:'Handen op bank achter je. Gecontroleerd neergaan. Ellebogen naar achter.'},
+  ],
+  benen:[
+    {id:'db_legpress',name:'Leg Press',type:'legpress',muscle:'quads',ml:'Benen',sets:3,reps:'10–12',notes:'Voeten schouderbreedte. Knieën niet vergrendelen. Geen ego-gewicht.'},
+    {id:'db_squat',name:'Squat',type:'squat',muscle:'quads',ml:'Benen',sets:4,reps:'6–10',notes:'Voeten iets breder dan schouders. Diep zakken. Knieën over de voeten.'},
+    {id:'db_rdl',name:'Romanian Deadlift',type:'deadlift',muscle:'hamstrings',ml:'Hamstrings',sets:3,reps:'8–10',notes:'Heupen naar achter — niet naar beneden. Lichte knikkenie. Stretch voelen.'},
+    {id:'db_bulgsplit',name:'Bulgarian Split Squat',type:'squat',muscle:'quads',ml:'Benen',sets:3,reps:'8–10',notes:'Achterste voet op bank. Romp rechtop. Één been veel harder dan squat.'},
+    {id:'db_legext',name:'Leg Extension',type:'legpress',muscle:'quads',ml:'Quads',sets:3,reps:'12–15',notes:'Volledig strekken bovenaan. Gecontroleerd terug. Geïsoleerde quad oefening.'},
+    {id:'db_legcurl',name:'Leg Curl',type:'legcurl',muscle:'hamstrings',ml:'Hamstrings',sets:3,reps:'10–12',notes:'Heupen op de bank laten. Gecontroleerd 2 seconden neergang.'},
+    {id:'db_goblet',name:'Goblet Squat',type:'squat',muscle:'quads',ml:'Benen',sets:3,reps:'12',notes:'Dumbbell voor de borst. Diepe squat. Goed voor mobiliteit.'},
+    {id:'db_calfrise',name:'Calf Raise',type:'squat',muscle:'quads',ml:'Kuiten',sets:4,reps:'15–20',notes:'Volledige range. Pauze bovenaan. Hoge reps werkt beter voor kuiten.'},
+    {id:'db_lunges',name:'Walking Lunges',type:'squat',muscle:'quads',ml:'Benen',sets:3,reps:'10–12/been',notes:'Romp rechtop. Achterste knie bijna de grond. Grote stap.'},
+    {id:'db_hacksq',name:'Hack Squat',type:'squat',muscle:'quads',ml:'Benen',sets:3,reps:'10–12',notes:'Voeten laag op het platform = meer quad. Goede squat alternatief.'},
+  ],
+  core:[
+    {id:'db_pallof',name:'Pallof Press',type:'rotation',muscle:'core',ml:'Core (anti-rotatie)',sets:2,reps:'10–12/kant',notes:'Kabel op borsthoogte. Zijdelings staan. Anti-rotatie. Romp strak.'},
+    {id:'db_deadbug',name:'Dead Bug',type:'plank',muscle:'core',ml:'Core',sets:3,reps:'8–10/kant',notes:'Rug plat op de grond. Arm en been uitstrekken tegelijk. Geen rug optillen.'},
+    {id:'db_plank',name:'Plank',type:'plank',muscle:'core',ml:'Core',sets:3,reps:'30–60s',notes:'Lichaam recht van hoofd tot hakken. Billen niet omhoog. Adem door.'},
+    {id:'db_abwheel',name:'Ab Wheel',type:'plank',muscle:'core',ml:'Core',sets:3,reps:'8–12',notes:'Vanuit knieën beginnen. Zo ver uitrollen als rug stabiel blijft. Traag terug.'},
+    {id:'db_crunch',name:'Cable Crunch',type:'row',muscle:'core',ml:'Core',sets:3,reps:'12–15',notes:'Hoge kabel. Knieën op de grond. Ellebogen naar de knieën. Core, niet nek.'},
+    {id:'db_hangknee',name:'Hanging Knee Raise',type:'pulldown',muscle:'core',ml:'Core',sets:3,reps:'12–15',notes:'Volledig hangen. Knieën naar borst. Heupen niet slingeren.'},
+    {id:'db_russtw',name:'Russian Twist',type:'rotation',muscle:'core',ml:'Core (rotatie)',sets:3,reps:'20',notes:'Voeten omhoog. Romp 45°. Heen en weer draaien. Gewicht optioneel.'},
+    {id:'db_birddog',name:'Bird Dog',type:'plank',muscle:'core',ml:'Core',sets:3,reps:'10/kant',notes:'Op handen en knieën. Arm en been uitstrekken. Stabiel blijven.'},
+  ],
+};
+
+// Flat map all exercises
+const EXMAP={};
+Object.values(DB).forEach(list=>list.forEach(ex=>{EXMAP[ex.id]=ex}));
+
+const CAT_LABELS={rug:'Rug',borst:'Borst',schouders:'Schouders',bicep:'Bicep',tricep:'Tricep',benen:'Benen',core:'Core'};
+
+// Default routine
+const DEFAULT_ROUTINE=[
+  {title:'Maandag',focus:'Pull + Armen',cardio:'Bike intervals — 4 min (20s hard / 10s rustig)',
+    exercises:['db_chestrow','db_latneutral','db_extrot','db_facepull','db_legpress','db_cablecurl','db_ropepush']},
+  {title:'Woensdag',focus:'Push (schoudervriendelijk) + Armen',cardio:'Incline walk (15%, 5.5 km/u) of fiets — 4 min',
+    exercises:['db_cablepress','db_floorpress','db_cablateral','db_pallof','db_hammercurl','db_1armpush']},
+  {title:'Vrijdag',focus:'Full Body Light + Armen',cardio:'Cardio finisher vrij te kiezen — 4 min',
+    exercises:['db_rdl','db_cablerow','db_landmine','db_revdeck','db_legcurl','db_preacher','db_ropepush']},
 ];
-let cur=0,wts={},chk={};
-function loadWts(){try{const r=localStorage.getItem('gymwts');if(r)wts=JSON.parse(r)}catch(e){wts={}}}
-function saveWts(){try{localStorage.setItem('gymwts',JSON.stringify(wts))}catch(e){}}
-function renderAll(){DAYS.forEach((d,i)=>renderDay(d,i));upd()}
-function renderDay(day,di){
+
+// ── STATE ───────────────────────────────────────────────────
+let cur=0;
+let routine=JSON.parse(JSON.stringify(DEFAULT_ROUTINE));
+let setLog={};   // key: `${di}_${exId}_${si}` -> {w, r, done}
+let comments={}; // key: `${di}_${exId}` -> string
+
+// TIMER
+let tIv=null,tSec=0,tExId=null;
+const TSEC=40;
+
+// SWAP MODAL
+let swapTarget={di:0,pos:0};
+let activeCat='rug';
+
+// ── STORAGE ─────────────────────────────────────────────────
+function load(){
+  try{const r=localStorage.getItem('gym_routine');if(r)routine=JSON.parse(r)}catch(e){}
+  try{const r=localStorage.getItem('gym_sets');if(r)setLog=JSON.parse(r)}catch(e){}
+  try{const r=localStorage.getItem('gym_cmts');if(r)comments=JSON.parse(r)}catch(e){}
+}
+function saveRoutine(){try{localStorage.setItem('gym_routine',JSON.stringify(routine))}catch(e){}}
+function saveSets(){try{localStorage.setItem('gym_sets',JSON.stringify(setLog))}catch(e){}}
+function saveCmts(){try{localStorage.setItem('gym_cmts',JSON.stringify(comments))}catch(e){}}
+
+// ── TIMER ────────────────────────────────────────────────────
+function startTimer(exId){
+  if(tIv&&tExId===exId){cancelTimer();return}
+  cancelTimer();
+  tExId=exId;tSec=TSEC;
+  setTBtn(exId,'run');showOv();
+  tIv=setInterval(()=>{
+    tSec--;
+    setTBtn(exId,tSec>0?(tSec<=10?'urg':'run'):'done');
+    showOv();
+    if(tSec<=0){
+      clearInterval(tIv);tIv=null;
+      if(navigator.vibrate)navigator.vibrate([300,100,300]);
+      setTimeout(()=>{document.getElementById('tOv').classList.remove('show');setTBtn(exId,'idle');tExId=null},2200);
+    }
+  },1000);
+}
+function cancelTimer(){
+  if(tIv){clearInterval(tIv);tIv=null}
+  document.getElementById('tOv').classList.remove('show');
+  if(tExId){setTBtn(tExId,'idle');tExId=null}
+}
+function showOv(){
+  const ov=document.getElementById('tOv'),big=document.getElementById('tBig'),lbl=document.getElementById('tLbl');
+  ov.classList.add('show');
+  if(tSec<=0){big.textContent='GO!';big.className='t-big klaar';lbl.textContent='rust klaar!';ov.style.borderColor='var(--gr)'}
+  else{big.textContent=tSec;big.className='t-big'+(tSec<=10?' urg':'');lbl.textContent='seconden rust';ov.style.borderColor=tSec<=10?'var(--co)':'var(--br)'}
+}
+function setTBtn(id,state){
+  const b=document.getElementById('tbtn-'+id);if(!b)return;
+  b.className='timer-btn'+(state==='run'?' running':state==='urg'?' running urgent':state==='done-t'?' done-t':'');
+  b.textContent=state==='idle'?'⏱ 40s':state==='done-t'?'✓ klaar':'⏱ '+tSec+'s';
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function renderAll(){DAYS_RENDER.forEach((d,i)=>renderDay(i));upd()}
+
+function renderDay(di){
+  const day=routine[di];
   const el=document.getElementById('d'+di);
   let h=`<div class="day-hdr"><div class="day-title">${day.title}</div><div class="day-focus">${day.focus}</div></div>`;
-  day.ex.forEach(ex=>{
-    const w=wts[ex.id]||'';const done=!!chk[ex.id];
-    h+=`<div class="card${done?' done':''}" id="card-${ex.id}"><div class="card-body">
-      <div class="mv">${mksvg(ex.m)}</div>
+  day.exercises.forEach((exId,pos)=>{
+    const ex=EXMAP[exId];if(!ex)return;
+    h+=renderCard(ex,di,pos);
+  });
+  h+=`<div class="cardio"><div class="cardio-ic">🔥</div><div><div class="cardio-lbl">Cardio</div><div class="cardio-tx">${day.cardio}</div></div></div>`;
+  el.innerHTML=h;
+  el.querySelectorAll('.comment-in').forEach(t=>{if(t.value)ar(t)});
+}
+
+function renderCard(ex,di,pos){
+  const cmt=comments[di+'_'+ex.id]||'';
+  const sets=ex.sets;
+  let allDone=true;
+  let setRows='<div class="set-head"><span>Set</span><span style="text-align:center">Gewicht</span><span style="text-align:center">Reps</span><span></span></div>';
+  for(let si=0;si<sets;si++){
+    const key=`${di}_${ex.id}_${si}`;
+    const sd=setLog[key]||{w:'',r:'',done:false};
+    if(!sd.done)allDone=false;
+    setRows+=`<div class="set-row">
+      <span class="set-num">${si+1}</span>
+      <input class="set-in${sd.done?' done-set':''}" type="number" min="0" step="2.5" placeholder="kg" value="${sd.w}" oninput="onSetW('${di}','${ex.id}',${si},this.value)"/>
+      <input class="set-in${sd.done?' done-set':''}" type="number" min="0" step="1" placeholder="reps" value="${sd.r}" oninput="onSetR('${di}','${ex.id}',${si},this.value)"/>
+      <button class="set-chk${sd.done?' on':''}" onclick="toggleSet('${di}','${ex.id}',${si})">${sd.done?'✓':''}</button>
+    </div>`;
+  }
+  return `<div class="card${allDone?' done':''}" id="card-${di}-${ex.id}">
+    <div class="card-top">
+      <div class="ex-il">
+        ${exSvg(ex.type,ex.muscle)}
+        <span class="ex-type-badge">${TYPE_LABEL[ex.type]||ex.type}</span>
+      </div>
       <div class="ci">
-        <div class="ci-top">
-          <div><div class="ex-name">${ex.name}</div><div class="ex-mus">${ex.ml}</div></div>
-          <button class="chk${done?' on':''}" onclick="tChk('${ex.id}',${di})">${done?'✓':''}</button>
-        </div>
-        ${ex.warn?`<div class="warn">⚠ ${ex.warn}</div>`:''}
-        <div class="stats">
-          <span class="pill s">${ex.sets} sets</span>
-          <span class="pill r">${ex.reps} reps</span>
-          <div class="w-wrap">
-            <input class="w-in" type="number" min="0" step="2.5" placeholder="kg" value="${w}" oninput="onW('${ex.id}',this.value)"/>
-            <span class="w-unit">kg</span>
+        <div class="ci-head">
+          <div>
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-mus">${ex.ml} · ${ex.sets}×${ex.reps}</div>
+          </div>
+          <div class="ci-btns">
+            <button class="ic-btn done-btn${allDone?' on':''}" onclick="toggleAllSets('${di}','${ex.id}',${ex.sets})" title="Alles afvinken">${allDone?'✓':'○'}</button>
           </div>
         </div>
-        <button class="nt-btn" onclick="tNt('nt-${ex.id}',this)">▸ Techniek</button>
-        <div class="nt-body" id="nt-${ex.id}">${ex.notes}</div>
+        ${ex.warn?`<div class="warn">⚠ ${ex.warn}</div>`:''}
+        <div class="set-table">${setRows}</div>
       </div>
-    </div></div>`;
-  });
-  h+=`<div class="cardio"><div class="cardio-ic">🔥</div><div><div class="cardio-lbl">Cardio finisher</div><div class="cardio-tx">${day.cardio}</div></div></div>`;
-  el.innerHTML=h;
+    </div>
+    <div class="card-actions">
+      <button class="timer-btn" id="tbtn-${ex.id}" onclick="startTimer('${ex.id}')">⏱ 40s</button>
+      <button class="act-btn" onclick="tNt('nt-${di}-${ex.id}',this)">▸ techniek</button>
+      <button class="swap-btn" onclick="openSwap(${di},${pos})">↔ wissel</button>
+    </div>
+    <div class="nt-body" id="nt-${di}-${ex.id}">${ex.notes}</div>
+    <textarea class="comment-in" placeholder="Opmerking... (bijv: +2.5kg volgende keer, vorm goed)" rows="1"
+      oninput="onCmt('${di}','${ex.id}',this.value);ar(this)" onfocus="ar(this)">${cmt}</textarea>
+  </div>`;
 }
-function sw(i){cur=i;document.querySelectorAll('.day').forEach((d,j)=>d.classList.toggle('active',j===i));document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));upd()}
-function tChk(id){chk[id]=!chk[id];const card=document.getElementById('card-'+id);const btn=card.querySelector('.chk');card.classList.toggle('done',chk[id]);btn.classList.toggle('on',chk[id]);btn.textContent=chk[id]?'✓':'';upd()}
-function onW(id,v){wts[id]=v;saveWts()}
-function tNt(id,btn){const el=document.getElementById(id);el.classList.toggle('open');btn.textContent=el.classList.contains('open')?'▾ Techniek':'▸ Techniek'}
-function upd(){const day=DAYS[cur];const tot=day.ex.length;const done=day.ex.filter(e=>chk[e.id]).length;const pct=tot?Math.round(done/tot*100):0;document.getElementById('pt').textContent=`${done} / ${tot} gedaan`;document.getElementById('pp').textContent=`${pct}%`;document.getElementById('pf').style.width=`${pct}%`}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/Bonusbuurt/sw.js'))}
-loadWts();renderAll();
+
+const DAYS_RENDER=[0,1,2];
+
+// ── INTERACTIONS ─────────────────────────────────────────────
+function sw(i){
+  cur=i;
+  document.querySelectorAll('.day').forEach((d,j)=>d.classList.toggle('active',j===i));
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  upd();
+}
+
+function onSetW(di,exId,si,v){
+  const key=`${di}_${exId}_${si}`;
+  if(!setLog[key])setLog[key]={w:'',r:'',done:false};
+  setLog[key].w=v;saveSets();
+}
+function onSetR(di,exId,si,v){
+  const key=`${di}_${exId}_${si}`;
+  if(!setLog[key])setLog[key]={w:'',r:'',done:false};
+  setLog[key].r=v;saveSets();
+}
+function toggleSet(di,exId,si){
+  const key=`${di}_${exId}_${si}`;
+  if(!setLog[key])setLog[key]={w:'',r:'',done:false};
+  setLog[key].done=!setLog[key].done;
+  saveSets();
+  renderDay(parseInt(di));
+  upd();
+}
+function toggleAllSets(di,exId,sets){
+  const ex=EXMAP[exId];
+  let allDone=true;
+  for(let si=0;si<sets;si++){const k=`${di}_${exId}_${si}`;if(!setLog[k]||!setLog[k].done){allDone=false;break}}
+  for(let si=0;si<sets;si++){
+    const k=`${di}_${exId}_${si}`;
+    if(!setLog[k])setLog[k]={w:'',r:'',done:false};
+    setLog[k].done=!allDone;
+  }
+  saveSets();renderDay(parseInt(di));upd();
+}
+
+function onCmt(di,exId,v){comments[di+'_'+exId]=v;saveCmts()}
+function tNt(id,btn){const el=document.getElementById(id);el.classList.toggle('open');btn.textContent=el.classList.contains('open')?'▾ techniek':'▸ techniek'}
+function ar(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+
+function upd(){
+  let total=0,done=0;
+  routine[cur].exercises.forEach(exId=>{
+    const ex=EXMAP[exId];if(!ex)return;
+    for(let si=0;si<ex.sets;si++){
+      total++;
+      const k=`${cur}_${exId}_${si}`;
+      if(setLog[k]&&setLog[k].done)done++;
+    }
+  });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pt').textContent=`${done} / ${total} sets gedaan`;
+  document.getElementById('pp').textContent=`${pct}%`;
+  document.getElementById('pf').style.width=`${pct}%`;
+}
+
+// ── SWAP MODAL ───────────────────────────────────────────────
+function openSwap(di,pos){
+  swapTarget={di,pos};
+  const curExId=routine[di].exercises[pos];
+  const curEx=EXMAP[curExId];
+  document.getElementById('modalSub').textContent=`Vervangt: ${curEx?curEx.name:'?'}`;
+  // Find what category the current exercise is in
+  let startCat='rug';
+  Object.entries(DB).forEach(([cat,list])=>{if(list.find(e=>e.id===curExId))startCat=cat});
+  activeCat=startCat;
+  renderCatTabs();
+  renderExList();
+  document.getElementById('modalBg').classList.add('show');
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modalBg').classList.remove('show');
+  document.getElementById('modal').classList.remove('show');
+}
+function renderCatTabs(){
+  const wrap=document.getElementById('catTabs');
+  wrap.innerHTML=Object.entries(CAT_LABELS).map(([k,v])=>
+    `<div class="cat-tab${activeCat===k?' active':''}" onclick="setCat('${k}')">${v}</div>`
+  ).join('');
+}
+function setCat(cat){activeCat=cat;renderCatTabs();renderExList()}
+function renderExList(){
+  const curExId=routine[swapTarget.di].exercises[swapTarget.pos];
+  const list=DB[activeCat]||[];
+  document.getElementById('exList').innerHTML=list.map(ex=>{
+    const isCur=ex.id===curExId;
+    return `<div class="ex-db-item${isCur?' current':''}" onclick="doSwap('${ex.id}')">
+      <div class="ex-db-il">${exSvg(ex.type,ex.muscle,true)}</div>
+      <div>
+        <div class="ex-db-name">${ex.name}${isCur?' ✓':''}</div>
+        <div class="ex-db-meta">${ex.ml} · ${ex.sets}×${ex.reps}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function doSwap(newExId){
+  const {di,pos}=swapTarget;
+  routine[di].exercises[pos]=newExId;
+  saveRoutine();
+  closeModal();
+  renderDay(di);
+  upd();
+}
+
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/Bonusbuurt/sw.js'));
+load();
+renderAll();
 </script>
 </body>
 </html>
