@@ -182,7 +182,7 @@ function tChk(id){chk[id]=!chk[id];const card=document.getElementById('card-'+id
 function onW(id,v){wts[id]=v;saveWts()}
 function tNt(id,btn){const el=document.getElementById(id);el.classList.toggle('open');btn.textContent=el.classList.contains('open')?'▾ Techniek':'▸ Techniek'}
 function upd(){const day=DAYS[cur];const tot=day.ex.length;const done=day.ex.filter(e=>chk[e.id]).length;const pct=tot?Math.round(done/tot*100):0;document.getElementById('pt').textContent=`${done} / ${tot} gedaan`;document.getElementById('pp').textContent=`${pct}%`;document.getElementById('pf').style.width=`${pct}%`}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/Bonusbuurt/sw.js'))}
 loadWts();renderAll();
 </script>
 </body>
