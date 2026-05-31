@@ -1,5 +1,11 @@
-const CACHE = 'gymlog-v1';
-const FILES = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'gymlog-v2';
+const FILES = [
+  '/Bonusbuurt/',
+  '/Bonusbuurt/index.html',
+  '/Bonusbuurt/manifest.json',
+  '/Bonusbuurt/icon-192.png',
+  '/Bonusbuurt/icon-512.png'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
@@ -14,7 +20,5 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
-  );
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });
