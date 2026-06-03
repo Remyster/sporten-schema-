@@ -679,7 +679,7 @@ function doAction(newExId){
   saveRoutine();closeModal();renderDay(di);upd();
 }
 
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/Bonusbuurt/sw.js'));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register("./sw.js");
 load();renderAll();
 </script>
 </body>
