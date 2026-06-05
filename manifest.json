@@ -1,9 +1,9 @@
 {
   "name": "Gym Log",
   "short_name": "Gym Log",
-  "description": "Trainingsschema met sets, reps en gewichten",
-  "start_url": ".",
-  "scope": ".",
+  "description": "Persoonlijk trainingsschema met gewichtenopslag",
+  "start_url": "/Bonusbuurt/",
+  "scope": "/Bonusbuurt/",
   "display": "standalone",
   "background_color": "#0d0d0d",
   "theme_color": "#0d0d0d",
